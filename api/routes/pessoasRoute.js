@@ -5,6 +5,7 @@ const router = Router();
 router.get("/pessoas", PessoaController.getAllPessoas);
 router.get("/pessoas/:id", PessoaController.getPessoaById);
 router.post("/pessoas", PessoaController.createPessoa);
+router.post("/pessoas/:id/restaura", PessoaController.restorePessoa);
 router.put("/pessoas/:id", PessoaController.updatePessoa);
 router.delete("/pessoas/:id", PessoaController.deletePessoa);
 router.get(
@@ -15,6 +16,7 @@ router.post(
   "/pessoas/:estudanteId/matricula",
   PessoaController.createMatricula
 );
+router.post("/pessoas/:estudanteId/matricula/:matriculaId/restaura", PessoaController.restoreMatricula);
 router.put(
   "/pessoas/:estudanteId/matricula/:matriculaId",
   PessoaController.updateMatricula

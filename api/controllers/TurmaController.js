@@ -32,6 +32,18 @@ class TurmaController {
     }
   }
 
+  static async restoreTurma(req, res) {
+    try {
+      const { id } = req.params;
+      await database.Turmas.restore({ where: { id: Number(id) } });
+      return res
+        .status(200)
+        .json({ message: `Id ${id} restaurado com sucesso.` });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  }
+
   static async updateTurma(req, res) {
     try {
       const { id } = req.params;
@@ -54,7 +66,9 @@ class TurmaController {
       await database.Turmas.destroy({
         where: { id: Number(id) },
       });
-      return res.status(200).json({message: `Id ${id} excluído com sucesso.`});
+      return res
+        .status(200)
+        .json({ message: `Id ${id} excluído com sucesso.` });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }

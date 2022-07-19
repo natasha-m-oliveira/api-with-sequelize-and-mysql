@@ -32,6 +32,18 @@ class NivelController {
     }
   }
 
+  static async restoreNivel(req, res) {
+    try {
+      const { id } = req.params;
+      await database.Niveis.restore({ where: { id: Number(id) } });
+      return res
+        .status(200)
+        .json({ message: `Id ${id} restaurado com sucesso.` });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  }
+
   static async updateNivel(req, res) {
     try {
       const { id } = req.params;
@@ -54,7 +66,9 @@ class NivelController {
       await database.Niveis.destroy({
         where: { id: Number(id) },
       });
-      return res.status(200).json({message: `Id ${id} excluído com sucesso.`});
+      return res
+        .status(200)
+        .json({ message: `Id ${id} excluído com sucesso.` });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }

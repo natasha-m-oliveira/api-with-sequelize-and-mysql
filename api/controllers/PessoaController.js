@@ -62,6 +62,18 @@ class PessoaController {
     }
   }
 
+  static async restorePessoa(req, res) {
+    try {
+      const { id } = req.params;
+      await database.Pessoas.restore({ where: { id: Number(id) } });
+      return res
+        .status(200)
+        .json({ message: `Id ${id} restaurado com sucesso.` });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  }
+
   static async getMatriculaById(req, res) {
     try {
       const { estudanteId, matriculaId } = req.params;
@@ -83,6 +95,18 @@ class PessoaController {
       const newMatricula = { ...req.body, estudanteId: Number(estudanteId) };
       const matricula = await database.Matriculas.create(newMatricula);
       return res.status(201).json(matricula);
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  }
+
+  static async restoreMatricula(req, res) {
+    try {
+      const { estudanteId, matriculaId } = req.params;
+      await database.Matriculas.restore({ where: { id: Number(matriculaId) } });
+      return res
+        .status(200)
+        .json({ message: `Id ${matriculaId} restaurado com sucesso.` });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }
