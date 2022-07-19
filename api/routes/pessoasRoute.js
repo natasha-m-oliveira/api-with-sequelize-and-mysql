@@ -2,7 +2,8 @@ const { Router } = require("express");
 const PessoaController = require("../controllers/PessoaController");
 
 const router = Router();
-router.get("/pessoas", PessoaController.getAllPessoas);
+router.get("/pessoas/todos", PessoaController.getAllPessoas);
+router.get("/pessoas", PessoaController.getAllActivePessoas);
 router.get("/pessoas/:id", PessoaController.getPessoaById);
 router.post("/pessoas", PessoaController.createPessoa);
 router.post("/pessoas/:id/restaura", PessoaController.restorePessoa);
