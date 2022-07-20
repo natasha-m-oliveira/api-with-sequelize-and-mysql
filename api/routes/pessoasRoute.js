@@ -28,6 +28,7 @@ router.post(
   "/pessoas/:estudanteId/matriculas/:matriculaId/restaura",
   PessoaController.restoreMatricula
 );
+router.post("/pessoas/:estudanteId/cancela", PessoaController.cancelaPessoa);
 router.put("/pessoas/:id", PessoaController.updatePessoa);
 router.put(
   "/pessoas/:estudanteId/matriculas/:matriculaId",

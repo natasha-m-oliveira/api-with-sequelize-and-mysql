@@ -21,8 +21,8 @@ class PessoaController {
   }
 
   static async getPessoaById(req, res) {
+    const { id } = req.params;
     try {
-      const { id } = req.params;
       const pessoa = await database.Pessoas.findOne({
         where: { id: Number(id) },
       });
@@ -33,8 +33,8 @@ class PessoaController {
   }
 
   static async createPessoa(req, res) {
+    const newPessoa = req.body;
     try {
-      const newPessoa = req.body;
       const pessoa = await database.Pessoas.create(newPessoa);
       return res.status(201).json(pessoa);
     } catch (err) {
@@ -43,9 +43,9 @@ class PessoaController {
   }
 
   static async updatePessoa(req, res) {
+    const { id } = req.params;
+    const newData = req.body;
     try {
-      const { id } = req.params;
-      const newData = req.body;
       await database.Pessoas.update(newData, {
         where: { id: Number(id) },
       });
@@ -59,8 +59,8 @@ class PessoaController {
   }
 
   static async deletePessoa(req, res) {
+    const { id } = req.params;
     try {
-      const { id } = req.params;
       await database.Pessoas.destroy({
         where: { id: Number(id) },
       });
@@ -72,9 +72,32 @@ class PessoaController {
     }
   }
 
-  static async restorePessoa(req, res) {
+  static async cancelaPessoa(req, res) {
+    const { estudanteId } = req.params;
     try {
-      const { id } = req.params;
+      database.sequelize.transaction(async (transaction) => {
+        await database.Pessoas.update(
+          { ativo: false },
+          { where: { id: Number(estudanteId) } },
+          { transaction }
+        );
+        await database.Matriculas.update(
+          { status: "cancelado" },
+          { where: { estudanteId: Number(estudanteId) } },
+          { transaction }
+        );
+        return res.status(200).json({
+          message: `Matriculas ref. estudante ${estudanteId} canceladas com sucesso.`,
+        });
+      });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  }
+
+  static async restorePessoa(req, res) {
+    const { id } = req.params;
+    try {
       await database.Pessoas.restore({ where: { id: Number(id) } });
       return res
         .status(200)
@@ -85,8 +108,8 @@ class PessoaController {
   }
 
   static async getAllMatriculas(req, res) {
+    const { estudanteId } = req.params;
     try {
-      const { estudanteId } = req.params;
       const pessoa = await database.Pessoas.findOne({
         where: { id: Number(estudanteId) },
       });
@@ -98,8 +121,8 @@ class PessoaController {
   }
 
   static async getMatriculasByTurma(req, res) {
+    const { turmaId } = req.params;
     try {
-      const { turmaId } = req.params;
       const matriculas = await database.Matriculas.findAndCountAll({
         where: {
           turmaId: Number(turmaId),
@@ -115,8 +138,8 @@ class PessoaController {
   }
 
   static async getTurmasLotadas(req, res) {
+    const maxByTurma = 2;
     try {
-      const maxByTurma = 2;
       const turmasLotadas = await database.Matriculas.findAndCountAll({
         where: {
           status: "confirmado",
@@ -132,8 +155,8 @@ class PessoaController {
   }
 
   static async getMatriculaById(req, res) {
+    const { estudanteId, matriculaId } = req.params;
     try {
-      const { estudanteId, matriculaId } = req.params;
       const matricula = await database.Matriculas.findOne({
         where: {
           id: Number(matriculaId),
@@ -147,9 +170,9 @@ class PessoaController {
   }
 
   static async createMatricula(req, res) {
+    const { estudanteId } = req.params;
+    const newMatricula = { ...req.body, estudanteId: Number(estudanteId) };
     try {
-      const { estudanteId } = req.params;
-      const newMatricula = { ...req.body, estudanteId: Number(estudanteId) };
       const matricula = await database.Matriculas.create(newMatricula);
       return res.status(201).json(matricula);
     } catch (err) {
@@ -158,8 +181,8 @@ class PessoaController {
   }
 
   static async restoreMatricula(req, res) {
+    const { estudanteId, matriculaId } = req.params;
     try {
-      const { estudanteId, matriculaId } = req.params;
       await database.Matriculas.restore({
         where: { id: Number(matriculaId), estudanteId: Number(estudanteId) },
       });
@@ -172,9 +195,9 @@ class PessoaController {
   }
 
   static async updateMatricula(req, res) {
+    const { estudanteId, matriculaId } = req.params;
+    const newData = req.body;
     try {
-      const { estudanteId, matriculaId } = req.params;
-      const newData = req.body;
       await database.Matriculas.update(newData, {
         where: { id: Number(matriculaId), estudanteId: Number(estudanteId) },
       });
@@ -188,8 +211,8 @@ class PessoaController {
   }
 
   static async deleteMatricula(req, res) {
+    const { estudanteId, matriculaId } = req.params;
     try {
-      const { estudanteId, matriculaId } = req.params;
       await database.Matriculas.destroy({
         where: { id: Number(matriculaId), estudanteId: Number(estudanteId) },
       });
