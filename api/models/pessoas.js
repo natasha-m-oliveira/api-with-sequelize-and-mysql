@@ -9,14 +9,34 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Pessoas.hasMany(models.Turmas, { foreignKey: "docenteId" });
-      Pessoas.hasMany(models.Matriculas, { foreignKey: "estudanteId" });
+      Pessoas.hasMany(models.Matriculas, {
+        foreignKey: "estudanteId",
+        scope: { status: "confirmado" },
+        as: "aulasMatriculadas"
+      });
     }
   }
   Pessoas.init(
     {
-      nome: DataTypes.STRING,
+      nome: {
+        type: DataTypes.STRING,
+        validate: {
+          isName: function (data) {
+            if (data.length < 3)
+              throw new Error("O campo nome deve ter pelo menos 3 caracteres.");
+          },
+        },
+      },
       ativo: DataTypes.BOOLEAN,
-      email: DataTypes.STRING,
+      email: {
+        type: DataTypes.STRING,
+        validate: {
+          isEmail: {
+            args: true,
+            msg: "O campo email deve ser um endereço de e-mail válido.",
+          },
+        },
+      },
       role: DataTypes.STRING,
     },
     {

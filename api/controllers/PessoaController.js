@@ -83,6 +83,19 @@ class PessoaController {
     }
   }
 
+  static async getAllMatriculas(req, res) {
+    try {
+      const { estudanteId } = req.params;
+      const pessoa = await database.Pessoas.findOne({
+        where: { id: Number(estudanteId) },
+      });
+      const matriculas = await pessoa.getAulasMatriculadas();
+      return res.status(200).json(matriculas);
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  }
+
   static async getMatriculaById(req, res) {
     try {
       const { estudanteId, matriculaId } = req.params;
@@ -112,7 +125,9 @@ class PessoaController {
   static async restoreMatricula(req, res) {
     try {
       const { estudanteId, matriculaId } = req.params;
-      await database.Matriculas.restore({ where: { id: Number(matriculaId) } });
+      await database.Matriculas.restore({
+        where: { id: Number(matriculaId), estudanteId: Number(estudanteId) },
+      });
       return res
         .status(200)
         .json({ message: `Id ${matriculaId} restaurado com sucesso.` });
@@ -141,7 +156,7 @@ class PessoaController {
     try {
       const { estudanteId, matriculaId } = req.params;
       await database.Matriculas.destroy({
-        where: { id: Number(matriculaId) },
+        where: { id: Number(matriculaId), estudanteId: Number(estudanteId) },
       });
       return res
         .status(200)

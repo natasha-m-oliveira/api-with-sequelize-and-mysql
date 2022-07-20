@@ -5,29 +5,32 @@ const router = Router();
 router.get("/pessoas/todos", PessoaController.getAllPessoas);
 router.get("/pessoas", PessoaController.getAllActivePessoas);
 router.get("/pessoas/:id", PessoaController.getPessoaById);
-router.post("/pessoas", PessoaController.createPessoa);
-router.post("/pessoas/:id/restaura", PessoaController.restorePessoa);
-router.put("/pessoas/:id", PessoaController.updatePessoa);
-router.delete("/pessoas/:id", PessoaController.deletePessoa);
 router.get(
-  "/pessoas/:estudanteId/matricula/:matriculaId",
+  "/pessoas/:estudanteId/matriculas",
+  PessoaController.getAllMatriculas
+);
+router.get(
+  "/pessoas/:estudanteId/matriculas/:matriculaId",
   PessoaController.getMatriculaById
 );
+router.post("/pessoas", PessoaController.createPessoa);
+router.post("/pessoas/:id/restaura", PessoaController.restorePessoa);
 router.post(
-  "/pessoas/:estudanteId/matricula",
+  "/pessoas/:estudanteId/matriculas",
   PessoaController.createMatricula
 );
-router.post("/pessoas/:estudanteId/matricula/:matriculaId/restaura", PessoaController.restoreMatricula);
+router.post(
+  "/pessoas/:estudanteId/matriculas/:matriculaId/restaura",
+  PessoaController.restoreMatricula
+);
+router.put("/pessoas/:id", PessoaController.updatePessoa);
 router.put(
-  "/pessoas/:estudanteId/matricula/:matriculaId",
+  "/pessoas/:estudanteId/matriculas/:matriculaId",
   PessoaController.updateMatricula
 );
-router.put(
-  "/pessoas/:estudanteId/matricula/:matriculaId",
-  PessoaController.updateMatricula
-);
+router.delete("/pessoas/:id", PessoaController.deletePessoa);
 router.delete(
-  "/pessoas/:estudanteId/matricula/:matriculaId",
+  "/pessoas/:estudanteId/matriculas/:matriculaId",
   PessoaController.deleteMatricula
 );
 
