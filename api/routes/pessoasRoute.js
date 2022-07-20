@@ -10,9 +10,14 @@ router.get(
   PessoaController.getAllMatriculas
 );
 router.get(
+  "/pessoas/matriculas/:turmaId/confirmadas",
+  PessoaController.getMatriculasByTurma
+);
+router.get(
   "/pessoas/:estudanteId/matriculas/:matriculaId",
   PessoaController.getMatriculaById
 );
+router.get("/pessoas/matriculas/lotadas", PessoaController.getTurmasLotadas);
 router.post("/pessoas", PessoaController.createPessoa);
 router.post("/pessoas/:id/restaura", PessoaController.restorePessoa);
 router.post(
