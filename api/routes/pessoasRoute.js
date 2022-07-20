@@ -1,9 +1,10 @@
 const { Router } = require("express");
 const PessoaController = require("../controllers/PessoaController");
+const MatriculaController = require("../controllers/MatriculaController");
 
 const router = Router();
-router.get("/pessoas/todos", PessoaController.getAllPessoas);
-router.get("/pessoas", PessoaController.getAllActivePessoas);
+router.get("/pessoas", PessoaController.getAllPessoas);
+router.get("/pessoas/ativas", PessoaController.getAllActivePessoas);
 router.get("/pessoas/:id", PessoaController.getPessoaById);
 router.get(
   "/pessoas/:estudanteId/matriculas",
@@ -11,33 +12,33 @@ router.get(
 );
 router.get(
   "/pessoas/matriculas/:turmaId/confirmadas",
-  PessoaController.getMatriculasByTurma
+  MatriculaController.getMatriculasByTurma
 );
 router.get(
   "/pessoas/:estudanteId/matriculas/:matriculaId",
-  PessoaController.getMatriculaById
+  MatriculaController.getMatriculaById
 );
-router.get("/pessoas/matriculas/lotadas", PessoaController.getTurmasLotadas);
+router.get("/pessoas/matriculas/lotadas", MatriculaController.getTurmasLotadas);
 router.post("/pessoas", PessoaController.createPessoa);
 router.post("/pessoas/:id/restaura", PessoaController.restorePessoa);
 router.post(
   "/pessoas/:estudanteId/matriculas",
-  PessoaController.createMatricula
+  MatriculaController.createMatricula
 );
 router.post(
   "/pessoas/:estudanteId/matriculas/:matriculaId/restaura",
-  PessoaController.restoreMatricula
+  MatriculaController.restoreMatricula
 );
 router.post("/pessoas/:estudanteId/cancela", PessoaController.cancelaPessoa);
 router.put("/pessoas/:id", PessoaController.updatePessoa);
 router.put(
   "/pessoas/:estudanteId/matriculas/:matriculaId",
-  PessoaController.updateMatricula
+  MatriculaController.updateMatricula
 );
 router.delete("/pessoas/:id", PessoaController.deletePessoa);
 router.delete(
   "/pessoas/:estudanteId/matriculas/:matriculaId",
-  PessoaController.deleteMatricula
+  MatriculaController.deleteMatricula
 );
 
 module.exports = router;
